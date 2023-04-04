@@ -38,8 +38,8 @@ class Item(models.Model):
     color = models.CharField(max_length=50, choices=COLOR_CHOICES)
     memory = models.CharField(max_length=6, choices=MEMORY_CHOICES)
     image = models.ImageField(upload_to='items', null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items', default=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='out of stock')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
 
 
     class Meta:
@@ -49,3 +49,25 @@ class Item(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+
+class Rating(models.Model):
+    RATES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='ratings')
+    rate = models.PositiveSmallIntegerField(choices=RATES)
+
+    def __str__(self) -> str:
+        return str(self.rate)
+    
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
+        unique_together = ['user', 'item']
