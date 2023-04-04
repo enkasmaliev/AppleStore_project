@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.db.models import Avg
+
 from .models import Category, Item, Rating
 
 
@@ -12,6 +14,16 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
+
+    def create(self, validated_data):
+        user = self.context.get('request').user
+        validated_data['user'] = user
+        return super().create(validated_data)
+    
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['ratings'] = instance.rating.aggregate(Avg('rate'))['rate__avg']
+    #     return representation
 
 
 
