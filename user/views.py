@@ -11,7 +11,7 @@ from .serializers import RegistrationSerializer, ActivationSerializer, LoginSeri
 class RegistrationView(CreateAPIView):
     serializer_class = RegistrationSerializer
 
-    def create(self, request: Request):
+    def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -21,7 +21,7 @@ class RegistrationView(CreateAPIView):
 class ActivationView(CreateAPIView):
     serializer_class = ActivationSerializer
 
-    def post(self, request: Request):
+    def post(self, request: Request, *args, **kwargs):
         serializer = ActivationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.activate()
