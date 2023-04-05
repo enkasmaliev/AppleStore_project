@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
+from django.db.models import Q
 from .models import Category, Item, Rating, Comment
 from .serializers import CategorySerializer, ItemSerializer, RatingSerializer, CommentSerializer
 from rest_framework.decorators import action
@@ -24,7 +25,7 @@ class ItemViewSet(ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    # filterset_fields = ['categories', 'status']
+    # filterset_fields = ['memory']
     search_fields = ['name', 'categories__name']
 
     def get_serializer_context(self):
@@ -51,6 +52,26 @@ class ItemViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(item=item)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def search(self, request, pk=None):
+        q = request.query_params.get('q')
+        queryset = self.get_queryset()
+        queryset = queryset.filter(Q(name__icontains=q) |
+                                   Q(description__icontains=q))
+        serializer = ItemSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    @action(methods=['POST', 'DELETE'], detail=True)
+    def comment(self, request, pk=None):
+        item = self.get_object()
+        if request.method == 'POST':
+            serializer = CommentSerializer(
+                data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=request.user, item=item)
+            return Response(serializer.data)
+        return Response({'TODO': 'Добавить удаление коммента'})
 
     
 
