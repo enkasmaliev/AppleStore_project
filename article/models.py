@@ -42,7 +42,7 @@ class Item(models.Model):
     image = models.ImageField(upload_to='items', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-
+    
 
     class Meta:
         verbose_name = 'Продукция'
