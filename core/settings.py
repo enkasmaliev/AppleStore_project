@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'article',
     'user', 
 
+
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,8 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CART_SESSION_ID = 'cart'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
