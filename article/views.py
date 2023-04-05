@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Q
 from .models import Category, Item, Rating, Comment
@@ -71,7 +71,13 @@ class ItemViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user, item=item)
             return Response(serializer.data)
-        return Response({'TODO': 'Добавить удаление коммента'})
+        elif request.method == 'DELETE':
+            comment = get_object_or_404(Comment, pk=pk, item=item)
+            if comment.user == request.user:
+                comment.delete()
+                return Response({'message': 'Comment deleted successfully.'})
+            else:
+                return Response({'message': 'You do not have permission to delete this comment.'})
 
     
 
