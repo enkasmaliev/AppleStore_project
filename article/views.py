@@ -24,7 +24,7 @@ class ItemViewSet(ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['categories', 'status']
+    # filterset_fields = ['categories', 'status']
     search_fields = ['name', 'categories__name']
 
     def get_serializer_context(self):
@@ -52,10 +52,6 @@ class ItemViewSet(ModelViewSet):
         serializer.save(item=item)
         return Response(serializer.data)
 
-
-class IsAuthor(BasePermission):
-    def has_object_permission(self, request, obj):
-        return request.user.is_authenticated and request.user == obj.user
     
 
 
