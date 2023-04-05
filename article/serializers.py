@@ -1,7 +1,6 @@
 from rest_framework import serializers
+from .models import Category, Item, Rating, Comment
 from django.db.models import Avg
-
-from .models import Category, Item, Rating
 
 
 
@@ -44,3 +43,15 @@ class RatingSerializer(serializers.ModelSerializer):
         validated_data['user'] = self.context.get('request').user
         return super().create(validated_data)
     
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'user', 'item', 'text', 'created_at', 'updated_at')
+        
+
+
+
+

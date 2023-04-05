@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
+
 User = get_user_model()
 
 class Category(models.Model):
@@ -71,3 +73,21 @@ class Rating(models.Model):
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги'
         unique_together = ['user', 'item']
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='comments')
+
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self) -> str:
+        return f'Комментарий от пользователя {self.user.username}'
+    
+
