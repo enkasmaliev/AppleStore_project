@@ -24,7 +24,7 @@ class ItemViewSet(ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['categories', 'status']
+    # filterset_fields = ['categories', 'status']
     search_fields = ['name', 'categories__name']
 
     def get_serializer_context(self):
@@ -51,8 +51,6 @@ class ItemViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(item=item)
         return Response(serializer.data)
-
-
 
     
 
