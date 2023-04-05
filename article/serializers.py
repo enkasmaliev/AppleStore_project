@@ -15,14 +15,15 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        user = self.context.get('request').user
-        validated_data['user'] = user
+        user_id = self.context.get('request').user.id
+        validated_data['user_id'] = user_id
         return super().create(validated_data)
     
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['ratings'] = instance.rating.aggregate(Avg('rate'))['rate__avg']
-    #     return representation
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
+        # representation['rating'] = instance.rating.aggregate(Avg('rate'))['rate__avg']
+        return representation
 
 
 
