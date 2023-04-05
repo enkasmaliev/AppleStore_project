@@ -10,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAuthor
 
 
+
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -24,8 +25,8 @@ class ItemViewSet(ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    # filterset_fields = ['categories', 'status']
-    search_fields = ['name', 'categories__name']
+    # filterset_fields = ['id', 'user', 'item', 'text']
+    search_fields = ['name', 'categories__name', 'memory', 'color']
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
