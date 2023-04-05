@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Category, Item, Rating
-from .serializers import CategorySerializer, ItemSerializer, RatingSerializer
+from .models import Category, Item, Rating, Comment
+from .serializers import CategorySerializer, ItemSerializer, RatingSerializer, CommentSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, BasePermission
+
 
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
@@ -32,3 +34,25 @@ class ItemViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(item=item)
         return Response(serializer.data)
+
+
+
+    
+
+
+
+class CommentViewSet(ItemViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [IsAuthenticated]
+        elif self.action in ['update', 'destroy']:
+            self.permission_classes = [IsAuthor, ]
+        return super().get_permissions()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+        return context
