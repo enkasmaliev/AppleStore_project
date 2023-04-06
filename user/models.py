@@ -3,13 +3,6 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 
 # Create your models here.
 
-"""
-1. Написать модель (models.py)
-2. Добавить в админку (admin.py)
-3. Сериализовать ее (serializers.py - нужно скачать)
-4. Отобразить во вьюшке (views.py)
-5. Добавить пути (urls.py)
-"""
 
 class CustomUserManager(BaseUserManager):
     def _create(self, username, email, password, **extra_fields):
