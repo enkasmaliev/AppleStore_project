@@ -9,9 +9,14 @@ def create_activation_code(user):
 
 
 def send_activation_code(user):
-    message = f""" Спасибо за регистрацию! Ваш код активации {user.activation_code} """
+    activation_url = f'http://localhost:8000/account/activation/{user.activation_code}'
+    message = f"""
+        Thank you for signing up.
+        PLease, activate your account.
+        Activation link: {activation_url}
+    """
     send_mail(
-        subject='Активация аккаунта',
+        subject="Activate your account",
         message=message,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[user.email],
