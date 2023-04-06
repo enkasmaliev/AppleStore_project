@@ -21,6 +21,7 @@ class ItemSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['categories'] = [category.name for category in instance.categories.all()]
         representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
         # representation['rating'] = instance.rating.aggregate(Avg('rate'))['rate__avg']
         return representation
