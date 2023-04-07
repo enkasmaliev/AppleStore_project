@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Item, Rating, Comment
+from .models import Category, Item, Rating, Comment, ItemCollection
 from django.db.models import Avg
 
 
@@ -54,6 +54,9 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'item', 'text', 'created_at', 'updated_at')
         
 
-
+class ItemCollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemCollection
+        fields = ('id', 'text', 'items', 'created_at', 'updated_at',)
 
 
