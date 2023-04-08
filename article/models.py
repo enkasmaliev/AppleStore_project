@@ -91,3 +91,15 @@ class Comment(models.Model):
         return f'Комментарий от пользователя {self.user.username}'
     
 
+
+
+class ItemCollection(models.Model):
+    headline = models.CharField(max_length=200) 
+    text = models.TextField(default='')
+    items = models.ManyToManyField(Item)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )

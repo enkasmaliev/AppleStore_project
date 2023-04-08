@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Q
-from .models import Category, Item, Rating, Comment
-from .serializers import CategorySerializer, ItemSerializer, RatingSerializer, CommentSerializer
+from .models import Category, Item, Rating, Comment, ItemCollection
+from .serializers import CategorySerializer, ItemSerializer, RatingSerializer, CommentSerializer, ItemCollectionSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser, AllowAny
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAuthor
@@ -98,3 +98,15 @@ class CommentViewSet(ItemViewSet):
         context = super().get_serializer_context()
         context.update({'request': self.request})
         return context
+    
+
+class ItemCollectionViewSet(ModelViewSet):
+    queryset = ItemCollection.objects.all()
+    serializer_class = ItemCollectionSerializer
+
+    def get_permissions(self):
+        if self.action in ["create", "update", "destroy"]:
+            return [IsAdminUser()]   
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]     
+        return []
